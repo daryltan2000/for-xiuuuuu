@@ -1,20 +1,31 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
 
 export default function ScrapbookGallery() {
+  const [petals, setPetals] = useState<{ top: string; left: string }[]>([]);
+
+  useEffect(() => {
+    const newPetals = Array.from({ length: 15 }).map(() => ({
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+    }));
+    setPetals(newPetals);
+  }, []);
+  
   return (
     <div className="w-full bg-black relative">
       {/* Global floating petals background */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        {Array.from({ length: 15 }).map((_, i) => (
+        {petals.map((pos, i) => (
           <motion.span
             key={i}
             className="absolute text-pink-500/70 text-3xl"
             style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
+              top: pos.top,
+              left: pos.left,
             }}
             animate={{
               y: [0, 20, 0],
@@ -31,8 +42,8 @@ export default function ScrapbookGallery() {
           </motion.span>
         ))}
       </div>
-      
-      {/* Content with relative positioning */}
+
+      {/* Your content */}
       <div className="relative z-10">
         <HeroSection />
         <SceneOne />
